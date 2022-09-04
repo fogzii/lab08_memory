@@ -1,0 +1,23 @@
+image: comp1531/basic:latest
+
+cache:
+  paths:
+    - node_modules
+
+stages:
+  - checks
+    
+before_script:
+  - echo "This message is echoed at the very start!"
+
+testing:
+  stage: checks
+  script:
+    - echo 'Add testing here'
+    - echo 'echo!'
+
+linting:
+  stage: checks
+  script:
+    - echo 'Add linting here'
+    - echo "echo 'echo!'"
