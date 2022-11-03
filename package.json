@@ -4,8 +4,12 @@
   "description": "",
   "main": "src/game.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "ts-node src/game.ts",
+    "test": "jest",
+    "tsc": "tsc --noEmit",
+    "ts-node": "ts-node",
+    "lint": "eslint src/**.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

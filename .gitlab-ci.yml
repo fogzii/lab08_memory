@@ -4,13 +4,12 @@ stages:
   - checks
     
 before_script:
-  - echo "This message is echoed at the very start!"
+  - npm start
 
 testing:
   stage: checks
   script:
-    - echo 'Add testing here'
-    - echo 'echo!'
+    - npm run test
   only:
     - master
 
@@ -18,7 +17,6 @@ testing:
 linting:
   stage: checks
   script:
-    - echo 'Add linting here'
-    - echo "echo 'echo!'"
+    - npm run lint
   only:
     - master
