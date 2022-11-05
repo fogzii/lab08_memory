@@ -252,6 +252,17 @@ describe('saveGame', () => {
     addWord('hello');
     viewDictionary();
     expect(saveGame('game')).not.toThrow(Error);
+
+    resetGame();
+    loadGame('game');
+    expect(viewDictionary()).toStrictEqual(['hello']);
+    expect(() => getGameInfo()).toStrictEqual(
+      {
+        score: 1,
+        mistakesRemaining: 3,
+        cluesRemaining: 2,
+      }
+    );
   });
 });
 
@@ -282,5 +293,14 @@ describe('loadGame', () => {
 
     resetGame();
     expect(loadGame('game')).not.toThrow(Error);
+
+    expect(viewDictionary()).toStrictEqual(['hello']);
+    expect(() => getGameInfo()).toStrictEqual(
+      {
+        score: 1,
+        mistakesRemaining: 3,
+        cluesRemaining: 2,
+      }
+    );
   });
 });
