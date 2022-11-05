@@ -33,7 +33,7 @@ afterEach(() => {
 
 describe('getGameInfo', () => {
   test('function called at the beginning', () => {
-    expect(() => getGameInfo()).toStrictEqual(
+    expect(getGameInfo()).toStrictEqual(
       {
         score: 0,
         mistakesRemaining: 3,
@@ -47,13 +47,13 @@ describe('getGameInfo', () => {
     addWord('hello');
 
     // -2 mistakes
-    addWord('hello');
-    addWord('hello');
+    expect(() => addWord('hello')).toThrow(Error);
+    expect(() => addWord('hello')).toThrow(Error);
 
     // -1 clue
     viewDictionary();
 
-    expect(() => getGameInfo()).toStrictEqual(
+    expect(getGameInfo()).toStrictEqual(
       {
         score: 1,
         mistakesRemaining: 1,
@@ -70,16 +70,16 @@ describe('getGameInfo', () => {
     viewDictionary();
 
     // -3 mistakes
-    addWord('hello');
-    addWord('hello');
-    addWord('hello');
+    expect(() => addWord('hello')).toThrow(Error);
+    expect(() => addWord('hello')).toThrow(Error);
+    expect(() => addWord('hello')).toThrow(Error);
 
     // game is now inactive
-    addWord('hello');
-    addWord('penguin');
+    expect(() => addWord('hello')).toThrow(Error);
+    expect(() => addWord('penguin')).toThrow(Error);
     viewDictionary();
 
-    expect(() => getGameInfo()).toStrictEqual(
+    expect(getGameInfo()).toStrictEqual(
       {
         score: 1,
         mistakesRemaining: 0,
@@ -123,8 +123,9 @@ describe('addWord', () => {
 describe('removeWord', () => {
   describe('error', () => {
     test('the game is inactive', () => {
-      for (let i = 0; i < 4; i++) {
-        addWord('hello');
+      addWord('hello');
+      for (let i = 0; i < 3; i++) {
+        expect(() => addWord('hello')).toThrow(Error);
       }
 
       //game is now inactive
@@ -192,9 +193,9 @@ describe('viewDictionary', () => {
       viewDictionary();
 
       // -3 mistakes
-      addWord('hello');
-      addWord('hello');
-      addWord('hello');
+      expect(() => addWord('hello')).toThrow(Error);
+      expect(() => addWord('hello')).toThrow(Error);
+      expect(() => addWord('hello')).toThrow(Error);
 
       // game is now inactive
       expect(() => viewDictionary()).not.toThrow(Error);
@@ -206,13 +207,13 @@ describe('viewDictionary', () => {
 describe('resetGame', () => {
   test('successfully game reset', () => {
     addWord('hello');
-    addWord('hello');
-    addWord('hello');
+    expect(() => addWord('hello')).toThrow(Error);
+    expect(() => addWord('hello')).toThrow(Error);
     viewDictionary();
 
     expect(() => resetGame()).not.toThrow(Error);
 
-    expect(() => getGameInfo()).toStrictEqual(
+    expect(getGameInfo()).toStrictEqual(
       {
         score: 0,
         mistakesRemaining: 3,
@@ -227,53 +228,56 @@ describe('saveGame', () => {
     test('name given is an empty string', () => {
       addWord('hello');
       viewDictionary();
-      expect(saveGame('')).toThrow(Error);
+      expect(() => saveGame('')).toThrow(Error);
     });
 
     test('name given is not alphanumeric', () => {
       addWord('hello');
       viewDictionary();
-      expect(saveGame('!@##$^')).toThrow(Error);
+      expect(() => saveGame('!@##$^')).toThrow(Error);
     });
 
     test('game of this name is already saved', () => {
       addWord('hello');
       viewDictionary();
-      expect(saveGame('game')).not.toThrow(Error);
+      expect(() => saveGame('game')).not.toThrow(Error);
 
       resetGame();
 
       addWord('penguin');
-      expect(saveGame('game')).toThrow(Error);
+      expect(() => saveGame('game')).toThrow(Error);
     });
   });
 
   describe('success', () => {
-    addWord('hello');
-    viewDictionary();
-    expect(saveGame('game')).not.toThrow(Error);
+    test('game saved', () => {
+      addWord('hello');
+      viewDictionary();
+      expect(() => saveGame('game')).not.toThrow(Error);
 
-    resetGame();
-    loadGame('game');
-    expect(viewDictionary()).toStrictEqual(['hello']);
-    expect(() => getGameInfo()).toStrictEqual(
-      {
-        score: 1,
-        mistakesRemaining: 3,
-        cluesRemaining: 2,
-      }
-    );
+      resetGame();
+      loadGame('game');
+      expect(getGameInfo()).toStrictEqual(
+        {
+          score: 1,
+          mistakesRemaining: 3,
+          cluesRemaining: 2,
+        }
+      );
+      expect(viewDictionary()).toStrictEqual(['hello']);
+      expect(fs.existsSync('./memory_game.json')).toBe(true);
+    });
   });
 });
 
 describe('loadGame', () => {
   describe('errors', () => {
     test('name given is an empty string', () => {
-      expect(loadGame('')).toThrow(Error);
+      expect(() => loadGame('')).toThrow(Error);
     });
 
     test('name given is not alphanumeric', () => {
-      expect(loadGame('!@##$^')).toThrow(Error);
+      expect(() => loadGame('!@##$^')).toThrow(Error);
     });
 
     test('game of this name is already saved', () => {
@@ -282,25 +286,27 @@ describe('loadGame', () => {
       saveGame('game');
 
       resetGame();
-      expect(loadGame('potato')).toThrow(Error);
+      expect(() => loadGame('potato')).toThrow(Error);
     });
   });
 
   describe('success', () => {
-    addWord('hello');
-    viewDictionary();
-    saveGame('game');
+    test('game loaded', () => {
+      addWord('hello');
+      viewDictionary();
+      saveGame('game');
 
-    resetGame();
-    expect(loadGame('game')).not.toThrow(Error);
+      resetGame();
+      expect(() => loadGame('game')).not.toThrow(Error);
 
-    expect(viewDictionary()).toStrictEqual(['hello']);
-    expect(() => getGameInfo()).toStrictEqual(
-      {
-        score: 1,
-        mistakesRemaining: 3,
-        cluesRemaining: 2,
-      }
-    );
+      expect(getGameInfo()).toStrictEqual(
+        {
+          score: 1,
+          mistakesRemaining: 3,
+          cluesRemaining: 2,
+        }
+      );
+      expect(viewDictionary()).toStrictEqual(['hello']);
+    });
   });
 });
