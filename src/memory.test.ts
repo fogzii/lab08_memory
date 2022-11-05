@@ -97,7 +97,7 @@ describe('addWord', () => {
       expect(() => addWord('hello')).toThrow(Error);
       expect(() => addWord('hello')).toThrow(Error);
 
-      //game is now inactive
+      // game is now inactive
       expect(getGameInfo().mistakesRemaining).toStrictEqual(0);
       expect(() => addWord('new')).toThrow(Error);
     });
@@ -128,7 +128,7 @@ describe('removeWord', () => {
         expect(() => addWord('hello')).toThrow(Error);
       }
 
-      //game is now inactive
+      // game is now inactive
       expect(getGameInfo().mistakesRemaining).toStrictEqual(0);
       expect(() => removeWord('hello')).toThrow(Error);
     });
@@ -136,7 +136,7 @@ describe('removeWord', () => {
     test('No such word', () => {
       expect(() => removeWord('hello')).toThrow(Error);
     });
-  
+
     test('Double remove', () => {
       addWord('hello');
       expect(() => removeWord('hello')).not.toThrow(Error);

@@ -101,7 +101,7 @@ export function loadGame(name: string) {
     throw new Error('no saved games correspond to the given name!');
   }
 
-  let data = JSON.parse(fs.readFileSync(`./memory_${name}.json`, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(`./memory_${name}.json`, 'utf8'));
   currentGame.score = data.score;
   currentGame.mistakesRemaining = data.mistakesRemaining;
   currentGame.cluesRemaining = data.cluesRemaining;
